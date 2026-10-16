@@ -1,0 +1,653 @@
+
+<!DOCTYPE html>
+<html lang="pt-MZ">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ff6a00">
+<title>Card MZ — Carteira Digital</title>
+<style>
+:root{--or:#ff6a00;--or2:#ff8a1f;--dk:#0d0d0f;--dk2:#16161a;--dk3:#1f1f24;--ln:#2b2b31;--tx:#fff;--mu:#9a9aa3;--gr:#0f7a43;--gr2:#18a35c;--wh:#fff;--ink:#1b1b1f;--ink2:#6b6b75}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#050506;font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--tx)}
+button,input,select{font:inherit;border:0;outline:0}
+button{cursor:pointer}
+.app{max-width:440px;margin:auto;min-height:100dvh;background:var(--dk);position:relative;padding-bottom:84px;overflow-x:hidden}
+.page{display:none;padding:18px 16px 24px;animation:fade .25s ease}
+.page.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+h1{font-size:24px;font-weight:700}
+.sub{color:#c9c9cf;font-size:13px;margin-top:4px}
+/* HOME */
+#home{padding:0;background:#f4f4f6;min-height:100dvh}
+.home-top{background:linear-gradient(160deg,#ff7a00,#ff5500);padding:18px 16px 70px;border-radius:0 0 26px 26px}
+.brand{display:flex;justify-content:space-between;align-items:center}
+.brand b{font-size:24px;font-style:italic;display:flex;gap:8px;align-items:center}
+.bell{position:relative;background:none;color:#fff}
+.bell i{position:absolute;top:-4px;right:-4px;background:#fff;color:var(--or);font-size:10px;font-style:normal;border-radius:9px;padding:0 5px;font-weight:700;display:none}
+.vcard{position:relative;border-radius:18px;padding:16px;color:#fff;background:linear-gradient(135deg,#0b5e33 0%,#13894b 45%,#0a4f2b 100%);box-shadow:0 14px 30px #0006;overflow:hidden;aspect-ratio:1.62}
+.vcard:after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 10%,#ffffff2a,transparent 45%),linear-gradient(115deg,transparent 55%,#ffffff12 56%,transparent 75%)}
+.vcard .r1{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1}
+.vcard .nm{display:flex;gap:6px;align-items:center;font-weight:600}
+.visa{font-weight:900;font-style:italic;font-size:22px;letter-spacing:1px}
+.chip{width:40px;height:30px;border-radius:6px;background:linear-gradient(135deg,#ffd77a,#d49a2a);margin:14px 0 6px;position:relative;z-index:1;display:inline-block}
+.nfc{display:inline-block;margin-left:8px;vertical-align:10px;position:relative;z-index:1}
+.vcard .num{font-size:15px;letter-spacing:2px;position:relative;z-index:1}
+.vcard .r3{display:flex;justify-content:space-between;align-items:flex-end;margin-top:10px;position:relative;z-index:1;font-size:13px}
+.vcard small{display:block;font-size:9px;opacity:.8}
+.home-card{margin:-58px 16px 0;position:relative}
+.wrap{padding:0 16px}
+.bal{background:#fff;color:var(--ink);border-radius:16px;padding:14px;margin-top:-14px;padding-top:26px;box-shadow:0 4px 14px #0001}
+.bal .l{font-size:12px;color:var(--ink2)}
+.bal .v{font-size:26px;font-weight:800;display:flex;justify-content:space-between;align-items:center}
+.bal .v span{font-size:15px}
+.bal .m{color:var(--ink2);font-size:15px}
+.bal .rt{color:#1c6fd1;font-size:10px;margin-top:4px}
+.acts{display:flex;justify-content:space-between;background:#fff;border-radius:16px;margin-top:10px;padding:14px 10px}
+.act{background:none;display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--ink);font-size:11px;width:25%}
+.act .c{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#ff8a1f,#ff5a00);display:grid;place-items:center;color:#fff;box-shadow:0 6px 14px #ff6a0055}
+.feed{background:#fff;border-radius:16px;margin-top:10px;padding:12px;color:var(--ink)}
+.feed-h{display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:6px}
+.feed-h a{color:var(--or);font-weight:500;font-size:12px}
+.tx{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid #eee}
+.tx:first-of-type{border:0}
+.tx .ic{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;flex:none}
+.tx .i{flex:1;font-size:12px}
+.tx .i b{display:block;font-size:12px}
+.tx .i span{color:#999;font-size:10px}
+.tx .a{text-align:right;font-size:12px;font-weight:700}
+.tx .a span{display:block;font-size:10px;color:#999;font-weight:400}
+.neg{color:#d02020}.pos{color:#13894b}
+.empty{color:#999;font-size:12px;text-align:center;padding:16px}
+/* DARK PANELS */
+.panel{background:var(--dk2);border:1px solid var(--ln);border-radius:16px;padding:14px;margin-top:14px}
+.wpanel{background:#fff;color:var(--ink);border-radius:16px;padding:14px;margin-top:14px}
+.ptitle{font-weight:700;font-size:14px;margin-bottom:8px}
+.opt{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid #eee;background:none;width:100%;text-align:left;color:var(--ink)}
+.opt:first-of-type{border:0}
+.opt .oi{width:34px;height:34px;border-radius:9px;border:1px solid #ddd;display:grid;place-items:center}
+.opt b{display:block;font-size:12px;font-weight:600}.opt span{font-size:10px;color:var(--ink2)}
+.opt .ch{margin-left:auto;color:#999}
+.colors{display:flex;gap:10px;margin-top:14px;align-items:center}
+.colors button{width:34px;height:34px;border-radius:50%;border:2px solid transparent}
+.colors button.on{border-color:#fff}
+.field{margin:10px 0}
+.field label{display:block;font-size:12px;margin-bottom:5px;font-weight:600}
+.field input,.field select{width:100%;height:42px;border-radius:9px;border:1px solid #ddd;padding:0 12px;background:#fff;color:var(--ink)}
+.dark .field input,.dark .field select{background:var(--dk3);border-color:var(--ln);color:#fff}
+.btn{width:100%;height:46px;border-radius:12px;background:linear-gradient(90deg,#ff7a00,#ff5500);color:#fff;font-weight:600;margin-top:14px;box-shadow:0 6px 16px #ff6a0040}
+.btn.w{background:#fff;color:var(--ink);box-shadow:none}
+.btn.o{background:none;border:1px solid var(--ln);color:#fff;box-shadow:none}
+.btn:disabled{opacity:.45}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+/* NOTIF */
+.bigbell{display:grid;place-items:center;height:110px;filter:drop-shadow(0 0 18px #ff6a00)}
+.bigbell svg{animation:ring 2.4s infinite}
+@keyframes ring{0%,70%,100%{transform:rotate(0)}75%{transform:rotate(-14deg)}85%{transform:rotate(14deg)}92%{transform:rotate(-6deg)}}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{min-width:30px;height:28px;padding:0 6px;border-radius:7px;border:1px solid #ddd;background:#fff;font-size:11px;color:var(--ink)}
+.chips button.on{background:var(--or);color:#fff;border-color:var(--or)}
+.seg{display:flex;background:#f0f0f2;border-radius:9px;padding:3px;margin-bottom:8px}
+.seg button{flex:1;height:30px;border-radius:7px;background:none;font-size:12px;color:var(--ink)}
+.seg button.on{background:var(--or);color:#fff}
+.sec-h{display:flex;justify-content:space-between;margin:18px 0 8px;font-size:14px;font-weight:600}
+.sec-h a{color:var(--or);font-size:12px}
+.nitem{display:flex;align-items:center;gap:12px;background:var(--dk2);border:1px solid var(--ln);border-radius:12px;padding:10px;margin-bottom:8px}
+.nitem .ni{width:36px;height:36px;border-radius:9px;background:#fff;display:grid;place-items:center}
+.nitem .t{flex:1;font-size:12px;line-height:1.4}
+.nitem .t span{color:#c9c9cf}
+.nitem button{background:none;color:#999;font-size:18px}
+/* STEPPER */
+.stepper{display:flex;justify-content:space-between;margin:18px 0 6px;position:relative}
+.stepper:before{content:"";position:absolute;left:16px;right:16px;top:15px;height:1px;background:#555}
+.st{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:9px;color:#ccc;z-index:1;width:20%}
+.st i{width:30px;height:30px;border-radius:50%;border:1px solid #888;background:var(--dk);display:grid;place-items:center;font-style:normal;font-size:12px;color:#fff}
+.st.on i{background:var(--or);border-color:var(--or);box-shadow:0 0 12px var(--or)}
+.st.done i{background:#13894b;border-color:#13894b}
+.wallets{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+.wal{aspect-ratio:1;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#fff;font-size:12px;font-weight:600;border:2px solid transparent;transition:.2s}
+.wal.on{border-color:#fff;transform:scale(1.04);box-shadow:0 0 18px #ff6a0099}
+.wal.off{opacity:.3;pointer-events:none}
+.mpesa{background:linear-gradient(135deg,#e8202a,#b3121a)}
+.paypal{background:linear-gradient(135deg,#0a62d0,#003087)}
+.binance{background:#16161a;border-color:#333}
+.binance.on{border-color:#f3ba2f}
+.info{display:flex;gap:10px;font-size:11px;color:#c9c9cf;line-height:1.5}
+.info svg{flex:none}
+.back{display:flex;align-items:center;gap:8px;font-size:17px;font-weight:700;background:none;color:inherit}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}
+.quick button{height:30px;border-radius:7px;background:#f0f0f2;font-size:12px;color:var(--ink)}
+.recv{background:#f6f6f8;border-radius:12px;padding:12px;margin-top:12px;font-size:12px}
+.recv .big{font-size:24px;font-weight:800}.recv .big span{font-size:13px}
+.recv .ln{display:flex;justify-content:space-between;padding:4px 0;border-top:1px dashed #ddd;color:var(--ink2)}
+.recv .ln b{color:var(--ink)}
+.warn{background:#f6f6f8;border-radius:10px;padding:10px;font-size:11px;color:var(--ink2);margin-top:12px}
+.warn b{color:var(--ink)}
+.conf{text-align:center;padding:10px 0}
+.conf .ci{width:64px;height:64px;border-radius:50%;margin:0 auto 10px;background:#fff3e8;display:grid;place-items:center}
+.conf p{font-size:12px;color:var(--ink2);margin-top:6px}
+.chk{display:flex;gap:10px;align-items:flex-start;text-align:left;font-size:12px;margin-top:14px;color:var(--ink)}
+.chk input{width:18px;height:18px;accent-color:var(--or);flex:none}
+.dots{display:flex;justify-content:center;gap:6px;margin-top:8px}
+.dots i{width:8px;height:8px;border-radius:50%;background:#ddd}
+.dots i.on{background:var(--or);width:20px;border-radius:4px}
+/* PROCESSING */
+.proc{background:linear-gradient(180deg,#141418,#0b0b0d);border:1px solid #ff6a0055;border-radius:16px;padding:22px 16px;margin-top:14px;text-align:center}
+.ring{width:130px;height:130px;margin:10px auto 18px;border-radius:50%;position:relative;display:grid;place-items:center}
+.ring:before{content:"";position:absolute;inset:0;border-radius:50%;border:4px solid #2a2a2e;border-top-color:var(--or);border-right-color:var(--or);animation:spin 1.1s linear infinite;box-shadow:0 0 24px #ff6a0055}
+.ring:after{content:"";position:absolute;inset:16px;border-radius:50%;border:1px dashed #ff6a0066;animation:spin 6s linear infinite reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ring .core{width:64px;height:64px;border-radius:50%;background:#1d1d22;display:grid;place-items:center;box-shadow:inset 0 0 12px #000}
+.proc h3{font-size:17px}
+.proc p{font-size:12px;color:#c9c9cf;margin-top:6px}
+.bar{height:5px;background:#2a2a2e;border-radius:3px;margin-top:16px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ff5500,#ffa040);border-radius:3px;transition:width .3s linear}
+.timer{font-size:28px;font-weight:800;color:var(--or);margin-top:12px}
+.pdet{background:var(--dk2);border:1px solid var(--ln);border-radius:12px;padding:12px;margin-top:14px;text-align:left;font-size:12px}
+.pdet .ln{display:flex;justify-content:space-between;padding:6px 0;border-top:1px solid var(--ln)}
+.pdet .ln:first-child{border:0}
+.pdet span{color:var(--mu)}
+/* RESULT */
+.res{background:linear-gradient(160deg,#13894b,#0a5a30);border-radius:16px;padding:18px 14px;margin-top:14px;text-align:center}
+.res .ok{width:58px;height:58px;border-radius:50%;border:3px solid #fff;margin:6px auto 10px;display:grid;place-items:center;animation:pop .4s}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+.res h3{font-size:18px}
+.res p{font-size:12px;opacity:.85;margin-top:6px}
+.res .numbox{border:1px solid #ffffffaa;border-radius:20px;padding:6px;margin:10px auto;font-size:18px;font-weight:700;width:70%}
+.res .tab{background:#fff;color:var(--ink);border-radius:10px;padding:10px 12px;margin-top:10px;text-align:left;font-size:12px}
+.res .tab div{display:flex;justify-content:space-between;padding:4px 0}
+.docs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.doc{background:#fff;color:var(--ink);border-radius:12px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:600}
+.doc .pdf{width:44px;height:54px;border-radius:6px;background:#e53935;color:#fff;display:grid;place-items:center;font-weight:800;font-size:12px}
+.doc .thumb{width:60px;height:54px;border-radius:6px;background:linear-gradient(160deg,#13894b,#0a5a30);display:grid;place-items:center}
+/* RECEIPT */
+.receipt{background:#fff;color:var(--ink);border-radius:16px;overflow:hidden;margin-top:14px;box-shadow:0 10px 30px #0008}
+.rc-h{background:linear-gradient(135deg,#ff7a00,#ff5500);color:#fff;padding:16px;display:flex;justify-content:space-between;align-items:center}
+.rc-h b{font-size:20px;font-style:italic}
+.rc-b{padding:16px}
+.rc-ok{text-align:center;padding-bottom:12px;border-bottom:2px dashed #eee}
+.rc-ok .c{width:50px;height:50px;border-radius:50%;background:#13894b;margin:0 auto 8px;display:grid;place-items:center}
+.rc-ok .amt{font-size:28px;font-weight:800;margin-top:4px}
+.rc-l{display:flex;justify-content:space-between;font-size:12px;padding:7px 0;border-bottom:1px solid #f1f1f1;gap:10px}
+.rc-l span{color:var(--ink2)}.rc-l b{text-align:right;word-break:break-all}
+.rc-f{text-align:center;font-size:10px;color:#999;padding:12px;background:#fafafa}
+.barcode{height:36px;margin:10px auto 4px;width:80%;background:repeating-linear-gradient(90deg,#111 0 2px,#fff 2px 4px,#111 4px 5px,#fff 5px 8px)}
+/* MAIS */
+.prof{display:flex;align-items:center;gap:12px;background:var(--dk2);border:1px solid var(--ln);border-radius:14px;padding:14px;margin-top:16px}
+.prof .av{width:48px;height:48px;border-radius:50%;background:#ddd;display:grid;place-items:center}
+.prof b{display:block}.prof span{font-size:11px;color:var(--mu)}
+.mitem{display:flex;align-items:center;gap:12px;background:var(--dk2);border:1px solid var(--ln);border-radius:12px;padding:14px;margin-top:10px;width:100%;color:#fff;text-align:left}
+.mitem b{display:block;font-size:13px;font-weight:500}.mitem span{font-size:10px;color:var(--mu)}
+.mitem .ch{margin-left:auto;color:#999}
+/* NAV */
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:440px;background:#111114;border-top:1px solid var(--ln);display:flex;padding:8px 4px calc(8px + env(safe-area-inset-bottom));z-index:20}
+.nav.light{background:#fff;border-color:#eee}
+.nav button{flex:1;background:none;display:flex;flex-direction:column;align-items:center;gap:4px;color:#ccc;font-size:9.5px}
+.nav.light button{color:#444}
+.nav button.on{color:var(--or)}
+/* TOAST */
+.toast{position:fixed;top:12px;left:50%;transform:translate(-50%,-150%);width:calc(100% - 24px);max-width:416px;background:#fff;color:var(--ink);border-radius:16px;padding:12px;display:flex;gap:12px;align-items:center;box-shadow:0 12px 40px #000a;z-index:50;transition:transform .45s cubic-bezier(.2,1.4,.4,1)}
+.toast.show{transform:translate(-50%,0)}
+.toast .ti{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#ff8a1f,#ff5500);display:grid;place-items:center;flex:none}
+.toast .ti svg{animation:ring 1s 2}
+.toast b{font-size:13px;display:block}.toast span{font-size:12px;color:var(--ink2)}
+.snack{position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:#222;color:#fff;font-size:12px;padding:9px 16px;border-radius:20px;opacity:0;transition:.3s;z-index:60;pointer-events:none}
+.snack.show{opacity:1}
+.modal{position:fixed;inset:0;background:#000b;display:none;align-items:flex-end;justify-content:center;z-index:40}
+.modal.show{display:flex}
+.sheet{background:#fff;color:var(--ink);width:100%;max-width:440px;border-radius:20px 20px 0 0;padding:18px 16px 24px;max-height:90dvh;overflow:auto;animation:up .3s}
+@keyframes up{from{transform:translateY(100%)}to{transform:none}}
+.cards-list .mini{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #eee;border-radius:10px;margin-top:8px;font-size:12px}
+.cards-list .mini i{width:40px;height:26px;border-radius:5px;flex:none}
+.cards-list .mini.on{border-color:var(--or)}
+@media print{body *{visibility:hidden}#printArea,#printArea *{visibility:visible}#printArea{position:absolute;left:0;top:0;width:100%}}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+<!-- ============ INÍCIO ============ -->
+<section class="page active" id="home">
+  <div class="home-top">
+    <div class="brand">
+      <b><svg width="30" height="24" viewBox="0 0 30 24" fill="none"><rect x="1" y="3" width="28" height="19" rx="4" fill="#fff"/><rect x="1" y="8" width="28" height="4" fill="#ff6a00"/><rect x="5" y="15" width="8" height="3" rx="1" fill="#ff6a00"/></svg>Card MZ</b>
+      <button class="bell" onclick="go('notif')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><i id="bellCount">0</i></button>
+    </div>
+  </div>
+  <div class="home-card"><div id="homeCard"></div></div>
+  <div class="wrap">
+    <div class="bal">
+      <div class="l">Saldo total ⊙</div>
+      <div class="v"><div>$ <span id="balUsd" style="font-size:26px">0.00</span> <span>USD</span></div>
+        <button style="background:none" onclick="toggleBal()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+      <div class="m">≈ <span id="balMzn">0,00</span> MZN</div>
+      <div class="rt">↻ 1 USD = 63,00 MZN</div>
+    </div>
+    <div class="acts">
+      <button class="act" onclick="go('lev')"><div class="c"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><path d="M12 19V5M5 12l7-7 7 7"/><path d="M4 21h16"/></svg></div>Levantar</button>
+      <button class="act" onclick="go('notif')"><div class="c"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><path d="M12 3v12M5 10l7 7 7-7"/><path d="M4 21h16"/></svg></div>Receber</button>
+      <button class="act" onclick="go('lev')"><div class="c"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></div>Transferir</button>
+      <button class="act" onclick="go('cards');openAdd()"><div class="c"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg></div>Adicionar</button>
+    </div>
+    <div class="feed">
+      <div class="feed-h">Últimos movimentos <a onclick="showHist()">Ver todos</a></div>
+      <div id="feed"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CARTÕES ============ -->
+<section class="page dark" id="cards">
+  <h1>Cartões</h1><div class="sub">Gerencie seus cartões</div>
+  <div style="margin-top:16px" id="cardsCard"></div>
+  <div class="colors" id="colors"></div>
+  <div class="wpanel">
+    <div class="ptitle">Opções do cartão</div>
+    <button class="opt" onclick="pickImg()"><div class="oi"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M6 20c1-3 4-4 6-4s5 1 6 4"/></svg></div><div><b>Alterar imagem do cartão</b><span>Use uma foto da sua galeria</span></div><span class="ch">›</span></button>
+    <button class="opt" onclick="openAdd(true)"><div class="oi" style="background:#222"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></div><div><b>Editar informações</b><span>Nome, validade, país, etc.</span></div><span class="ch">›</span></button>
+    <button class="opt" onclick="copyLink()"><div class="oi"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg></div><div><b>Copiar link do cartão</b><span>Compartilhe seu link de pagamento</span></div><span class="ch">›</span></button>
+    <button class="opt" onclick="openAdd(true)"><div class="oi"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></div><div><b>Editar link localmente</b><span>Altere apenas o nome e a validade</span></div><span class="ch">›</span></button>
+  </div>
+  <div class="cards-list" id="cardsList"></div>
+  <button class="btn" onclick="openAdd()">Adicionar novo cartão</button>
+  <input type="file" id="imgInput" accept="image/*" hidden>
+</section>
+
+<!-- ============ NOTIFICAÇÕES ============ -->
+<section class="page dark" id="notif">
+  <h1>Notificações</h1><div class="sub">Receba alertas de forma rápida</div>
+  <div class="bigbell"><svg width="80" height="80" viewBox="0 0 24 24"><defs><linearGradient id="bg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb347"/><stop offset="1" stop-color="#ff5a00"/></linearGradient></defs><path d="M18 9a6 6 0 1 0-12 0c0 6-2.5 8-2.5 8h17S18 15 18 9z" fill="url(#bg1)"/><circle cx="12" cy="20" r="2.2" fill="#ff8a1f"/></svg></div>
+  <div class="wpanel">
+    <div class="field"><label>Nome</label><input id="nName" placeholder="Ex: João Silva"></div>
+    <div class="field"><label>Valor (USD)</label><input id="nVal" type="number" inputmode="decimal" placeholder="Ex: 25.00"></div>
+    <div class="field"><label>Aguardar</label>
+      <div class="seg"><button class="on" data-u="s" onclick="setUnit('s')">Segundos</button><button data-u="m" onclick="setUnit('m')">Minutos</button></div>
+      <div class="chips" id="delayChips"></div>
+    </div>
+    <button class="btn" onclick="scheduleNotif()">Agendar Notificação</button>
+  </div>
+  <div class="sec-h">Notificações Ativas <a onclick="clearActive()">Limpar</a></div>
+  <div id="activeList"></div>
+</section>
+
+<!-- ============ LEVANTAMENTO ============ -->
+<section class="page dark" id="lev">
+  <div id="levHead">
+    <h1>Levantamento</h1><div class="sub">Transfira seus fundos</div>
+    <div class="stepper" id="stepper"></div>
+  </div>
+  <div id="levBody"></div>
+</section>
+
+<!-- ============ COMPROVATIVO ============ -->
+<section class="page dark" id="receiptPage">
+  <button class="back" onclick="go('lev')">← Comprovativo</button>
+  <div class="sub">Tire um print e envie como comprovativo</div>
+  <div id="printArea"></div>
+  <div class="row2"><button class="btn o" onclick="copyReceipt()">Copiar texto</button><button class="btn" onclick="window.print()">Baixar PDF</button></div>
+</section>
+
+<!-- ============ MAIS ============ -->
+<section class="page dark" id="mais">
+  <h1>Mais</h1><div class="sub">Configurações e opções</div>
+  <div class="prof"><div class="av"><svg width="30" height="30" viewBox="0 0 24 24" fill="#777"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></div><div><b id="pName">Carlos Silva</b><span>carlos.silva@email.com</span></div><span style="margin-left:auto;color:#999">›</span></div>
+  <button class="mitem" onclick="showHist()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><b>Histórico</b><span>Todas as transações e levantamentos</span></div><span class="ch">›</span></button>
+  <button class="mitem" onclick="exportData()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></svg><div><b>Exportar dados</b><span>Baixar suas informações</span></div><span class="ch">›</span></button>
+  <button class="mitem" onclick="clearData()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M3 6h18M8 6V4h8v2M6 6l1 15h10l1-15"/></svg><div><b>Limpar dados</b><span>Remover dados locais</span></div><span class="ch">›</span></button>
+  <button class="mitem" onclick="snack('Card MZ · Versão 1.0.0')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg><div><b>Sobre o aplicativo</b><span>Versão 1.0.0</span></div><span class="ch">›</span></button>
+  <button class="btn" style="margin-top:40px" onclick="go('home')">Sair</button>
+</section>
+
+<!-- NAV -->
+<nav class="nav light" id="nav">
+  <button data-p="home" class="on" onclick="go('home')"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3 11 12 3l9 8v10h-6v-6H9v6H3z"/></svg>Início</button>
+  <button data-p="cards" onclick="go('cards')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>Cartões</button>
+  <button data-p="notif" onclick="go('notif')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>Notificações</button>
+  <button data-p="lev" onclick="go('lev')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="9" r="2"/><path d="M8.5 5.5a5 5 0 0 1 7 0M6 3a8.5 8.5 0 0 1 12 0"/><path d="M5 21l7-9 7 9"/></svg>Levantamento</button>
+  <button data-p="mais" onclick="go('mais')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>Mais</button>
+</nav>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><div class="ti"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M18 9a6 6 0 1 0-12 0c0 6-2.5 8-2.5 8h17S18 15 18 9z"/><circle cx="12" cy="20" r="2"/></svg></div><div><b id="tTitle">Card MZ</b><span id="tMsg"></span></div></div>
+<div class="snack" id="snack"></div>
+
+<!-- MODAL -->
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="sheet" id="sheet"></div></div>
+
+<script>
+/* ================= DADOS ================= */
+const RATE=63;
+const COUNTRIES={
+ MZ:{n:"Moçambique",cur:"MZN",rate:63,code:"+258",ph:"84 123 4567",w:["mpesa","paypal","binance"]},
+ KE:{n:"Quénia",cur:"KES",rate:129,code:"+254",ph:"712 345 678",w:["mpesa","paypal","binance"]},
+ TZ:{n:"Tanzânia",cur:"TZS",rate:2600,code:"+255",ph:"712 345 678",w:["mpesa","paypal","binance"]},
+ AO:{n:"Angola",cur:"AOA",rate:910,code:"+244",ph:"923 456 789",w:["paypal","binance"]},
+ BR:{n:"Brasil",cur:"BRL",rate:5.4,code:"+55",ph:"11 91234 5678",w:["paypal","binance"]},
+ PT:{n:"Portugal",cur:"EUR",rate:.92,code:"+351",ph:"912 345 678",w:["paypal","binance"]},
+ ZA:{n:"África do Sul",cur:"ZAR",rate:18.2,code:"+27",ph:"82 123 4567",w:["paypal","binance"]},
+ US:{n:"Estados Unidos",cur:"USD",rate:1,code:"+1",ph:"555 123 4567",w:["paypal","binance"]}
+};
+const WAL={
+ mpesa:{n:"M-Pesa",cls:"mpesa",need:"phone",col:"#e8202a"},
+ paypal:{n:"PayPal",cls:"paypal",need:"link",col:"#003087"},
+ binance:{n:"Binance",cls:"binance",need:"link",col:"#f3ba2f"}
+};
+const ICON={
+ mpesa:'<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><rect x="6" y="2" width="12" height="20" rx="2.5" transform="rotate(12 12 12)"/><path d="M9 9l3 3 3-3M12 12v5" transform="rotate(12 12 12)"/></svg>',
+ paypal:'<svg width="28" height="30" viewBox="0 0 24 24"><path d="M7 21H3.5L6.5 3h7c3.5 0 5.5 2 4.8 5.2-.7 3.5-3.4 5-6.6 5H9.3z" fill="#fff"/><path d="M9.5 22H6.8l.6-3.2" fill="#9cc8ff"/><path d="M10 17h-2.4l1.6-9h4.4c2.6 0 4.6 1.5 4 4.3-.5 3-2.7 4.7-5.7 4.7z" fill="#9cc8ff" opacity=".85"/></svg>',
+ binance:'<svg width="30" height="30" viewBox="0 0 24 24" fill="#f3ba2f"><path d="M12 3l2.6 2.6L12 8.2 9.4 5.6zM6.3 8.7 8.9 11.3 6.3 13.9 3.7 11.3zM17.7 8.7l2.6 2.6-2.6 2.6-2.6-2.6zM12 9.4l2.6 2.6L12 14.6 9.4 12zM12 15.8l2.6 2.6L12 21l-2.6-2.6z"/></svg>'
+};
+const SMALLICON={
+ mpesa:'<div class="ic" style="background:#e8202a"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="2"/></svg></div>',
+ paypal:'<div class="ic" style="background:#0a62d0;color:#fff;font-weight:900;font-style:italic">P</div>',
+ binance:'<div class="ic" style="background:#16161a"><svg width="18" height="18" viewBox="0 0 24 24" fill="#f3ba2f"><path d="M12 3l2.6 2.6L12 8.2 9.4 5.6zM6.3 8.7 8.9 11.3 6.3 13.9 3.7 11.3zM17.7 8.7l2.6 2.6-2.6 2.6-2.6-2.6zM12 9.4l2.6 2.6L12 14.6 9.4 12zM12 15.8l2.6 2.6L12 21l-2.6-2.6z"/></svg></div>',
+ recv:'<div class="ic" style="background:#e9f7ef"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#13894b" stroke-width="2.4"><path d="M12 4v14M5 11l7 7 7-7"/></svg></div>'
+};
+const COLORS=[
+ "linear-gradient(135deg,#0b5e33,#13894b 45%,#0a4f2b)",
+ "linear-gradient(135deg,#0a3d91,#1f6be0 45%,#08306f)",
+ "linear-gradient(135deg,#5a1a9a,#8b3fe0 45%,#3d0f6b)",
+ "linear-gradient(135deg,#111,#3a3a3a 45%,#000)",
+ "linear-gradient(135deg,#9a6a08,#e0a520 45%,#7a5205)"
+];
+const defState={balance:125.5,cards:[{id:1,holder:"Carlos Silva",number:"4532 7781 0092 4827",exp:"12/28",country:"MZ",color:0,img:null}],activeCard:1,tx:[],sched:[],hide:false};
+let S;
+try{S=JSON.parse(localStorage.getItem("cardmz_v2"))||structuredClone(defState)}catch(e){S=structuredClone(defState)}
+const save=()=>localStorage.setItem("cardmz_v2",JSON.stringify(S));
+const $=id=>document.getElementById(id);
+const card=()=>S.cards.find(c=>c.id===S.activeCard)||S.cards[0];
+const ctry=()=>COUNTRIES[card()?.country||"MZ"];
+const fmt=(n,d=2)=>Number(n).toLocaleString("pt-PT",{minimumFractionDigits:d,maximumFractionDigits:d});
+const now=()=>{const d=new Date();return{date:d.toLocaleDateString("pt-PT"),time:d.toLocaleTimeString("pt-PT",{hour:"2-digit",minute:"2-digit"}),full:d.toLocaleString("pt-PT")}};
+
+/* ================= SOM PLIM ================= */
+let AC;
+function plim(){
+ try{
+  AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+  if(AC.state==="suspended")AC.resume();
+  const t=AC.currentTime;
+  [[1318.5,0],[1760,.12],[2637,.24]].forEach(([f,d])=>{
+   const o=AC.createOscillator(),g=AC.createGain();
+   o.type="sine";o.frequency.value=f;
+   g.gain.setValueAtTime(0,t+d);g.gain.linearRampToValueAtTime(.35,t+d+.01);g.gain.exponentialRampToValueAtTime(.001,t+d+.9);
+   o.connect(g).connect(AC.destination);o.start(t+d);o.stop(t+d+1);
+  });
+ }catch(e){}
+ if(navigator.vibrate)navigator.vibrate([80,60,80]);
+}
+document.addEventListener("click",()=>{AC=AC||new (window.AudioContext||window.webkitAudioContext)()},{once:true});
+
+/* ================= UI BASE ================= */
+function go(p){
+ document.querySelectorAll(".page").forEach(e=>e.classList.toggle("active",e.id===p));
+ document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("on",b.dataset.p===p||(p==="receiptPage"&&b.dataset.p==="lev")));
+ $("nav").classList.toggle("light",p==="home");
+ document.body.style.background=p==="home"?"#f4f4f6":"#050506";
+ window.scrollTo(0,0);
+ if(p==="home")renderHome();
+ if(p==="cards")renderCards();
+ if(p==="notif")renderActive();
+ if(p==="lev"&&L.step===0&&!L.busy)renderLev();
+}
+function snack(m){const s=$("snack");s.textContent=m;s.classList.add("show");clearTimeout(s._t);s._t=setTimeout(()=>s.classList.remove("show"),2200)}
+function toast(title,msg){$("tTitle").textContent=title;$("tMsg").textContent=msg;const t=$("toast");t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),4500)}
+function openModal(h){$("sheet").innerHTML=h;$("modal").classList.add("show")}
+function closeModal(){$("modal").classList.remove("show")}
+
+function cardHTML(c){
+ if(!c)return"";
+ const bg=c.img?`url(${c.img}) center/cover`:COLORS[c.color||0];
+ return `<div class="vcard" style="background:${bg}">
+  <div class="r1"><div class="nm"><svg width="22" height="18" viewBox="0 0 30 24" fill="none" stroke="#fff" stroke-width="2"><rect x="1" y="3" width="28" height="19" rx="4"/><path d="M1 9h28"/></svg>Card MZ</div><div class="visa">VISA</div></div>
+  <div><span class="chip"></span><span class="nfc"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M8 8a6 6 0 0 1 0 8M12 5a10 10 0 0 1 0 14M16 2a14 14 0 0 1 0 20"/></svg></span></div>
+  <div class="num">• • • •  ${c.number.replace(/\s/g,"").slice(-4)}</div>
+  <div class="r3"><div><small>Titular</small>${c.holder}</div><div style="text-align:right"><small>Validade</small>${c.exp}</div></div></div>`;
+}
+
+/* ================= HOME ================= */
+function renderHome(){
+ $("homeCard").innerHTML=cardHTML(card());
+ const c=ctry();
+ $("balUsd").textContent=S.hide?"•••••":fmt(S.balance);
+ $("balMzn").textContent=S.hide?"•••••":fmt(S.balance*RATE)+"";
+ const f=$("feed");
+ if(!S.tx.length){f.innerHTML='<div class="empty">Sem movimentos ainda. As notificações recebidas e levantamentos aparecem aqui.</div>';return}
+ f.innerHTML=S.tx.slice(0,15).map(txHTML).join("");
+ const n=S.tx.filter(t=>t.type==="in"&&!t.seen).length;
+ $("bellCount").textContent=n;$("bellCount").style.display=n?"block":"none";
+}
+function txHTML(t){
+ const ic=t.type==="in"?SMALLICON.recv:SMALLICON[t.wallet];
+ const sign=t.type==="in"?"+":"-";
+ const title=t.type==="in"?`Recebido · ${t.name}`:`${WAL[t.wallet].n} · Levantamento`;
+ return `<div class="tx" ${t.type==="out"?`onclick="openReceipt('${t.id}')"`:""}>${ic}<div class="i"><b>${title}</b><span>${t.date} • ${t.time}</span></div><div class="a ${t.type==="in"?"pos":"neg"}">${sign} $ ${fmt(t.usd)}<span>${fmt(t.usd*RATE)} MZN</span></div></div>`;
+}
+function toggleBal(){S.hide=!S.hide;save();renderHome()}
+function showHist(){
+ S.tx.forEach(t=>t.seen=true);save();
+ openModal(`<div class="ptitle" style="font-size:17px">Histórico</div><div class="feed" style="padding:0">${S.tx.length?S.tx.map(txHTML).join(""):'<div class="empty">Sem movimentos.</div>'}</div><button class="btn" onclick="closeModal()">Fechar</button>`);
+ renderHome();
+}
+
+/* ================= CARTÕES ================= */
+function renderCards(){
+ const c=card();
+ $("cardsCard").innerHTML=cardHTML(c);
+ $("colors").innerHTML=COLORS.map((g,i)=>`<button style="background:${g}" class="${!c.img&&c.color===i?"on":""}" onclick="setColor(${i})"></button>`).join("")+`<button style="background:#2a2a2e;color:#fff;font-size:20px" onclick="openAdd()">+</button>`;
+ $("cardsList").innerHTML=S.cards.length>1?`<div class="sec-h">Meus cartões</div>`+S.cards.map(k=>`<div class="mini ${k.id===S.activeCard?"on":""}" style="background:#fff;color:#111" onclick="S.activeCard=${k.id};save();renderCards()"><i style="background:${COLORS[k.color||0]}"></i><div style="flex:1"><b>${k.holder}</b><br><span style="color:#777">•••• ${k.number.slice(-4)} · ${COUNTRIES[k.country].n}</span></div>${S.cards.length>1?`<button style="background:none;color:#c00" onclick="event.stopPropagation();delCard(${k.id})">✕</button>`:""}</div>`).join(""):"";
+}
+function setColor(i){const c=card();c.color=i;c.img=null;save();renderCards()}
+function pickImg(){$("imgInput").click()}
+$("imgInput").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{card().img=r.result;save();renderCards();snack("Imagem do cartão atualizada")};r.readAsDataURL(f)};
+function copyLink(){const l=`https://cardmz.app/pay/${card().number.replace(/\s/g,"").slice(-8)}`;navigator.clipboard?.writeText(l);snack("Link copiado: "+l)}
+function delCard(id){S.cards=S.cards.filter(c=>c.id!==id);S.activeCard=S.cards[0].id;save();renderCards()}
+function openAdd(edit){
+ const c=edit?card():{holder:"",number:"",exp:"",country:"MZ",color:0};
+ openModal(`<div class="ptitle" style="font-size:17px">${edit?"Editar cartão":"Adicionar cartão"}</div>
+ <div class="field"><label>País</label><select id="fCountry">${Object.entries(COUNTRIES).map(([k,v])=>`<option value="${k}" ${k===c.country?"selected":""}>${v.n} (${v.cur})</option>`).join("")}</select></div>
+ <div class="field"><label>Nome do titular</label><input id="fHolder" value="${c.holder}" placeholder="Ex: Carlos Silva"></div>
+ <div class="field"><label>Número do cartão</label><input id="fNumber" inputmode="numeric" maxlength="19" value="${c.number}" placeholder="0000 0000 0000 0000"></div>
+ <div class="field"><label>Validade</label><input id="fExp" maxlength="5" value="${c.exp}" placeholder="MM/AA"></div>
+ <div class="hint" style="font-size:11px;color:#777">As formas de levantamento dependem do país escolhido.</div>
+ <button class="btn" onclick="saveCard(${edit?c.id:0})">${edit?"Guardar alterações":"Adicionar cartão"}</button>
+ <button class="btn w" onclick="closeModal()">Cancelar</button>`);
+ $("fNumber").oninput=e=>e.target.value=e.target.value.replace(/\D/g,"").slice(0,16).replace(/(.{4})/g,"$1 ").trim();
+ $("fExp").oninput=e=>{let v=e.target.value.replace(/\D/g,"").slice(0,4);if(v.length>2)v=v.slice(0,2)+"/"+v.slice(2);e.target.value=v};
+}
+function saveCard(id){
+ const h=$("fHolder").value.trim(),n=$("fNumber").value.trim(),x=$("fExp").value.trim(),co=$("fCountry").value;
+ if(!h||n.replace(/\s/g,"").length<12||!/^\d{2}\/\d{2}$/.test(x))return snack("Preencha todos os dados corretamente");
+ if(id){Object.assign(S.cards.find(c=>c.id===id),{holder:h,number:n,exp:x,country:co})}
+ else{const nc={id:Date.now(),holder:h,number:n,exp:x,country:co,color:S.cards.length%COLORS.length,img:null};S.cards.push(nc);S.activeCard=nc.id}
+ save();closeModal();renderCards();$("pName").textContent=card().holder;snack("Cartão guardado");
+}
+
+/* ================= NOTIFICAÇÕES ================= */
+let unit="s",delay=5;
+const DS={s:[1,2,3,5,10,15,20,30,45,59],m:[1,2,3,4,5]};
+function setUnit(u){unit=u;delay=DS[u][0];document.querySelectorAll(".seg button").forEach(b=>b.classList.toggle("on",b.dataset.u===u));renderChips()}
+function renderChips(){$("delayChips").innerHTML=DS[unit].map(v=>`<button class="${v===delay?"on":""}" onclick="delay=${v};renderChips()">${v}${unit}</button>`).join("")}
+function scheduleNotif(){
+ const name=$("nName").value.trim(),val=parseFloat($("nVal").value);
+ if(!name)return snack("Digite o nome");
+ if(!(val>0))return snack("Digite um valor válido");
+ const ms=delay*(unit==="m"?60000:1000);
+ S.sched.push({id:"n"+Date.now(),name,usd:val,at:Date.now()+ms});save();
+ $("nName").value="";$("nVal").value="";
+ snack(`Notificação agendada para ${delay} ${unit==="m"?"min":"seg"}`);
+ renderActive();plimPrime();
+}
+function plimPrime(){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();AC.resume()}catch(e){}}
+function renderActive(){
+ const l=$("activeList");
+ if(!S.sched.length){l.innerHTML='<div class="empty" style="color:#777">Nenhuma notificação agendada.</div>';return}
+ l.innerHTML=S.sched.map(n=>{const r=Math.max(0,Math.ceil((n.at-Date.now())/1000));const tt=r>=60?`${Math.floor(r/60)} min ${r%60}s`:`${r} s`;
+  return `<div class="nitem"><div class="ni">${SMALLICON.paypal.replace('class="ic"','class="ic" style="width:28px;height:28px"')}</div><div class="t"><b>${n.name}</b><br>$ ${fmt(n.usd)} USD<br><span>Em ${tt}</span></div><button onclick="cancelN('${n.id}')">✕</button></div>`}).join("");
+}
+function cancelN(id){S.sched=S.sched.filter(n=>n.id!==id);save();renderActive()}
+function clearActive(){S.sched=[];save();renderActive()}
+function fire(n){
+ const t=now();
+ S.balance+=n.usd;
+ S.tx.unshift({id:"t"+Date.now(),type:"in",name:n.name,usd:n.usd,date:t.date,time:t.time});
+ save();plim();toast("Card MZ · Valor recebido",`${n.name} enviou-lhe $ ${fmt(n.usd)} USD (${fmt(n.usd*RATE)} MZN)`);
+ renderHome();
+}
+setInterval(()=>{
+ const due=S.sched.filter(n=>n.at<=Date.now());
+ if(due.length){S.sched=S.sched.filter(n=>n.at>Date.now());due.forEach(fire);save()}
+ if($("notif").classList.contains("active"))renderActive();
+},500);
+
+/* ================= LEVANTAMENTO ================= */
+const STEPS=["Carteira","Valor","Destino","Confirmação","Resultado"];
+let L={step:0,wallet:null,usd:0,dest:"",conf:0,busy:false,tx:null};
+function renderStepper(){
+ $("stepper").innerHTML=STEPS.map((s,i)=>`<div class="st ${i<L.step?"done":i===L.step?"on":""}"><i>${i<L.step?"✓":i+1}</i>${s}</div>`).join("");
+}
+function processing(title,msg,ms,next){
+ L.busy=true;renderStepper();
+ $("levBody").innerHTML=`<div class="proc"><div class="ring"><div class="core"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/></svg></div></div><h3>${title}</h3><p>${msg}</p><div class="bar"><i id="pbar"></i></div></div>`;
+ requestAnimationFrame(()=>{$("pbar").style.transition=`width ${ms}ms linear`;$("pbar").style.width="100%"});
+ setTimeout(()=>{L.busy=false;next()},ms);
+}
+function renderLev(){
+ renderStepper();
+ const B=$("levBody"),c=ctry();
+ if(L.step===0){
+  const allowed=c.w;
+  B.innerHTML=`<div class="ptitle" style="margin-top:18px;font-size:16px">Escolha a carteira</div>
+  <div class="wallets">${Object.entries(WAL).map(([k,w])=>`<button class="wal ${w.cls} ${L.wallet===k?"on":""} ${allowed.includes(k)?"":"off"}" onclick="L.wallet='${k}';renderLev()">${ICON[k]}${w.n}</button>`).join("")}</div>
+  <button class="btn" ${L.wallet?"":"disabled"} onclick="processing('Aguarde um instante...','A preparar a carteira ${L.wallet?WAL[L.wallet].n:""}',2200,()=>{L.step=1;renderLev()})">Prosseguir</button>
+  <div class="panel info"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16v.5"/></svg><div>Selecione a carteira para prosseguir com o levantamento dos seus fundos. País do cartão: <b style="color:#fff">${c.n}</b>. ${allowed.includes("mpesa")?"":"M-Pesa não está disponível neste país."} O valor será convertido automaticamente.</div></div>`;
+ }
+ else if(L.step===1){
+  B.innerHTML=`<div class="wpanel"><button class="back" onclick="L.step=0;renderLev()">← Levantar fundos</button><div style="font-size:12px;color:#1c6fd1;margin:4px 0 8px">Digite o valor que deseja levantar via ${WAL[L.wallet].n}</div>
+  <div class="field"><label>Valor (USD)</label><input id="lvVal" type="number" inputmode="decimal" placeholder="0.00" value="${L.usd||""}"></div>
+  <div class="quick">${[10,20,50,100].map(v=>`<button onclick="$('lvVal').value=${v};calcRecv()">$${v}</button>`).join("")}</div>
+  <div class="recv" id="recv"></div>
+  <div style="font-size:11px;color:#777;margin-top:8px">Saldo disponível: $ ${fmt(S.balance)} USD · Mínimo $5.00</div>
+  <button class="btn" onclick="toDest()">Continuar</button></div>`;
+  $("lvVal").oninput=calcRecv;calcRecv();
+ }
+ else if(L.step===2){
+  const ph=WAL[L.wallet].need==="phone";
+  B.innerHTML=`<div class="wpanel"><button class="back" onclick="L.step=1;renderLev()">← Dados de destino</button><div style="font-size:12px;color:#1c6fd1;margin:4px 0 8px">${ph?"Informe o número de celular M-Pesa":"Insira o link de pagamento "+WAL[L.wallet].n}</div>
+  <div class="field"><label>${ph?"Número de celular":"Link de pagamento"}</label><input id="lvDest" ${ph?'inputmode="tel"':''} placeholder="${ph?"Ex: "+c.code+" "+c.ph:(L.wallet==="paypal"?"https://paypal.me/seunome":"https://app.binance.com/qr/...")}" value="${L.dest}"></div>
+  <div class="warn">ⓘ <b>Atenção</b><br>Verifique se ${ph?"o número":"o link"} está correto. O erro pode impedir a transferência.</div>
+  <button class="btn" onclick="toConfirm()">Processar</button></div>`;
+ }
+ else if(L.step===3){
+  const C=[
+   {t:"Confirme o valor",d:`Vai levantar <b>$ ${fmt(L.usd)} USD</b> (≈ ${fmt(L.usd*RATE)} MZN).`,k:"Confirmo que o valor está correto"},
+   {t:"Confirme o destino",d:`Destino ${WAL[L.wallet].n}: <b style="word-break:break-all">${L.dest}</b>`,k:"Confirmo que o destino me pertence"},
+   {t:"Autorizar operação",d:`Cartão •••• ${card().number.slice(-4)} · Titular ${card().holder}`,k:"Autorizo o Card MZ a processar este levantamento"}
+  ][L.conf];
+  B.innerHTML=`<div class="wpanel"><div class="conf"><div class="ci"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#ff6a00" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></div><div style="font-weight:700;font-size:16px">${C.t}</div><p>${C.d}</p><div class="dots">${[0,1,2].map(i=>`<i class="${i===L.conf?"on":""}"></i>`).join("")}</div></div>
+  <label class="chk"><input type="checkbox" id="ck" onchange="$('ckb').disabled=!this.checked">${C.k}</label>
+  <button class="btn" id="ckb" disabled onclick="nextConf()">Confirmar (${L.conf+1}/3)</button>
+  <button class="btn w" style="border:1px solid #ddd" onclick="L.conf?(L.conf--,renderLev()):(L.step=2,renderLev())">Voltar</button></div>`;
+ }
+ else if(L.step===4){finalProcess()}
+ else if(L.step===5){renderResult()}
+}
+function calcRecv(){
+ const v=parseFloat($("lvVal").value)||0;
+ const fee=0, net=v-fee;
+ $("recv").innerHTML=`<div style="font-weight:600">Você receberá</div><div class="big">$${fmt(net)} <span>USD</span></div><div style="font-weight:600;margin-bottom:6px">${fmt(net*RATE)} MZN</div>
+ <div class="ln"><span>Valor a levantar</span><b>$ ${fmt(v)}</b></div><div class="ln"><span>Valor em cash</span><b>${fmt(net*RATE)} MZN</b></div><div class="ln"><span>Taxa</span><b>${fmt(fee)}</b></div><div class="ln"><span>Câmbio</span><b>1 USD = ${RATE},00 MZN</b></div><div class="ln"><span>Carteira</span><b>${WAL[L.wallet].n}</b></div>`;
+}
+function toDest(){
+ const v=parseFloat($("lvVal").value);
+ if(!(v>=5))return snack("O valor mínimo é $5.00");
+ if(v>S.balance)return snack("Saldo insuficiente");
+ L.usd=v;
+ processing("A validar o valor...","A calcular o valor em cash e taxas",2200,()=>{L.step=2;renderLev()});
+}
+function toConfirm(){
+ const d=$("lvDest").value.trim();
+ if(WAL[L.wallet].need==="phone"){if(d.replace(/\D/g,"").length<9)return snack("Número de celular inválido")}
+ else if(!/^https?:\/\/.+\..+/.test(d))return snack("Insira um link de pagamento válido");
+ L.dest=d;
+ processing("A verificar o destino...",`A validar ${WAL[L.wallet].n}`,2400,()=>{L.step=3;L.conf=0;renderLev()});
+}
+function nextConf(){
+ if(L.conf<2){L.conf++;processing("A confirmar...","Verificação de segurança",1400,()=>{L.step=3;renderLev()})}
+ else{L.step=4;renderLev()}
+}
+function finalProcess(){
+ L.busy=true;renderStepper();
+ const T=35;let s=T;
+ const ref="CMZ"+Date.now().toString().slice(-9);
+ $("levBody").innerHTML=`<div class="proc"><div class="ring"><div class="core"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/></svg></div></div><h3>Aguarde alguns instantes...</h3><p>Estamos processando seu levantamento.<br>Não feche o aplicativo.</p><div class="timer" id="tmr">${T}s</div><div class="bar"><i id="pbar"></i></div><p id="pst" style="margin-top:10px">A ligar à ${WAL[L.wallet].n}...</p></div>
+ <div class="pdet">
+  <div class="ln"><span>Valor a ser retirado</span><b>$ ${fmt(L.usd)} USD</b></div>
+  <div class="ln"><span>Valor a ser transferido</span><b>$ ${fmt(L.usd)} USD</b></div>
+  <div class="ln"><span>Valor em cash</span><b>${fmt(L.usd*RATE)} MZN</b></div>
+  <div class="ln"><span>${WAL[L.wallet].need==="phone"?"Número de destino":"Link de destino"}</span><b style="max-width:60%;text-align:right;word-break:break-all">${L.dest}</b></div>
+ </div>`;
+ const msgs=["A ligar à "+WAL[L.wallet].n+"...","A verificar saldo...","A converter USD → MZN...","A enviar fundos...","A aguardar confirmação...","A finalizar..."];
+ const iv=setInterval(()=>{
+  s--;const p=(T-s)/T*100;
+  if($("tmr")){$("tmr").textContent=s+"s";$("pbar").style.width=p+"%";$("pst").textContent=msgs[Math.min(5,Math.floor(p/17))]}
+  if(s<=0){clearInterval(iv);
+   const t=now();
+   S.balance-=L.usd;
+   L.tx={id:ref,type:"out",wallet:L.wallet,usd:L.usd,dest:L.dest,date:t.date,time:t.time,full:t.full,holder:card().holder,card:card().number.slice(-4)};
+   S.tx.unshift(L.tx);save();plim();
+   toast("Levantamento concluído",`$ ${fmt(L.usd)} enviado para ${WAL[L.wallet].n}`);
+   L.busy=false;L.step=5;renderLev();renderHome();
+  }
+ },1000);
+}
+function renderResult(){
+ renderStepper();
+ const t=L.tx,mask=t.wallet==="mpesa"?"*** "+t.dest.replace(/\D/g,"").slice(-4):t.dest.replace(/^https?:\/\//,"").slice(0,18)+"…";
+ $("levBody").innerHTML=`<div class="res"><div class="ok"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M5 12l5 5 9-10"/></svg></div><h3>Levantamento concluído!</h3><p>Valor enviado com sucesso para ${t.wallet==="mpesa"?"o número":"o link"}:</p><div class="numbox">${mask}</div>
+ <div class="tab"><div><span>Carteira:</span><b>${WAL[t.wallet].n}</b></div><div><span>Valor:</span><b>$ ${fmt(t.usd)} USD</b></div><div><span>Recebido:</span><b>${fmt(t.usd*RATE)} MZN</b></div><div><span>Data:</span><b>${t.date} • ${t.time}</b></div><div><span>Ref.:</span><b>${t.id}</b></div></div></div>
+ <div class="docs"><button class="doc" onclick="copyReceipt('${t.id}')"><div class="pdf">PDF</div>Copiar comprovativo</button><button class="doc" onclick="openReceipt('${t.id}')"><div class="thumb"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg></div>Ver comprovativo</button></div>
+ <button class="btn" onclick="openReceipt('${t.id}')">Ver comprovativo</button>
+ <button class="btn w" onclick="L={step:0,wallet:null,usd:0,dest:'',conf:0,busy:false,tx:null};go('home')">Voltar ao início</button>`;
+}
+let curReceipt=null;
+function receiptText(t){return `CARD MZ — COMPROVATIVO DE LEVANTAMENTO
+Estado: CONCLUÍDO
+Referência: ${t.id}
+Data: ${t.date} ${t.time}
+Titular: ${t.holder}
+Cartão: •••• ${t.card}
+Carteira: ${WAL[t.wallet].n}
+Destino: ${t.dest}
+Valor retirado: $ ${fmt(t.usd)} USD
+Valor transferido: $ ${fmt(t.usd)} USD
+Valor em cash: ${fmt(t.usd*RATE)} MZN
+Taxa: 0,00
+Câmbio: 1 USD = ${RATE},00 MZN`}
+function openReceipt(id){
+ const t=S.tx.find(x=>x.id===id);if(!t)return;curReceipt=t;closeModal();
+ $("printArea").innerHTML=`<div class="receipt"><div class="rc-h"><b>Card MZ</b><span style="font-size:12px">Comprovativo</span></div><div class="rc-b">
+ <div class="rc-ok"><div class="c"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M5 12l5 5 9-10"/></svg></div><div style="font-weight:700;color:#13894b">Levantamento concluído</div><div class="amt">$ ${fmt(t.usd)} USD</div><div style="color:#777;font-size:13px">${fmt(t.usd*RATE)} MZN</div></div>
+ ${[["Referência",t.id],["Data e hora",t.date+" • "+t.time],["Titular",t.holder],["Cartão","VISA •••• "+t.card],["Carteira",WAL[t.wallet].n],[t.wallet==="mpesa"?"Número":"Link",t.dest],["Valor retirado","$ "+fmt(t.usd)+" USD"],["Valor transferido","$ "+fmt(t.usd)+" USD"],["Valor em cash",fmt(t.usd*RATE)+" MZN"],["Taxa","0,00"],["Câmbio","1 USD = "+RATE+",00 MZN"],["Estado","✔ Concluído"]].map(([a,b])=>`<div class="rc-l"><span>${a}</span><b>${b}</b></div>`).join("")}
+ <div class="barcode"></div><div style="text-align:center;font-size:10px;color:#999;letter-spacing:2px">${t.id}</div></div>
+ <div class="rc-f">Card MZ · Seu dinheiro, no seu controle.<br>Este documento é um comprovativo da operação.</div></div>`;
+ go("receiptPage");
+}
+function copyReceipt(id){
+ const t=id?S.tx.find(x=>x.id===id):curReceipt;if(!t)return;
+ navigator.clipboard?.writeText(receiptText(t)).then(()=>snack("Comprovativo copiado")).catch(()=>snack("Não foi possível copiar"));
+}
+
+/* ================= MAIS ================= */
+function exportData(){
+ const b=new Blob([JSON.stringify(S,null,2)],{type:"application/json"});
+ const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="cardmz-dados.json";a.click();snack("Dados exportados");
+}
+function clearData(){if(confirm("Remover todos os dados locais?")){S=structuredClone(defState);save();L={step:0,wallet:null,usd:0,dest:"",conf:0,busy:false,tx:null};go("home");snack("Dados limpos")}}
+
+/* ================= INIT ================= */
+renderChips();renderHome();$("pName").textContent=card().holder;
+</script>
+</body>
+</html>
